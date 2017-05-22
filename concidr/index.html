@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>concidr - Convert IP address range to CIDR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <style type="text/css">
+    body {
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>concidr</h1>
+    <p class="lead">A tool to convert IP address range to subnet (of /16, /24, or /32) CIDRs.</p>
+
+    <form>
+      <div class="form-group">
+        <label for="ipv4range">IPv4 Address Range</label>
+        <input type="email" class="form-control" id="ipv4range" aria-describedby="ipv4rangeHelp" placeholder="Enter the first and the last IP address">
+        <small id="ipv4rangeHelp" class="form-text text-muted">Example: 103.21.244.0 - 103.21.247.255</small>
+      </div>
+    </form>
+
+    <br>
+    
+    <div id="subnets">
+      
+    </div>
+    <br>
+    <br>
+    <br>
+    <small>
+      This tool is based on (using a modified version of):<br>
+      https://github.com/franksrevenge/IPSubnetCalculator<br>
+    </small>
+  </div>
+  <script type="text/javascript" src="./lib/ip-subnet-calculator.js"></script>
+  <script>
+    function calculateNetmask() {
+      if(!document.querySelector("#firstIp").value || !document.querySelector("#lastIp").value) return;
+      const first = document.querySelector("#firstIp").value.split('.');
+      const last = document.querySelector("#lastIp").value.split('.');
+      
+
+    }
+    document.querySelector("#ipv4range").addEventListener("keyup", function(e) {
+      re = /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?:\s?\-\s?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|\/(\d{1,2}))/i;
+      var matches = this.value.match(re);
+      if (undefined !== matches[1] && undefined !== matches[2]) {
+        document.querySelector("#subnets").innerHTML = IpSubnetCalculator.calculate( matches[1],  matches[2] ).map( subnet => subnet.ipLowStr+'/'+subnet.prefixSize ).join('<br>');
+      }
+    });
+  </script>
+</body>
+</html>
